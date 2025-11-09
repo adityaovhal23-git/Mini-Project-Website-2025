@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f4f4f4; }
+        .container { max-width: 1100px; margin: 0 auto; }
+        .dashboard { display: flex; justify-content: space-between; gap: 20px; }
+        .section { background: #fff; padding: 20px; border-radius: 5px; box-shadow: 0 0 10px #ccc; width: 48%; }
+        h2 { margin: 0 0 15px; }
+        input, button { margin: 5px 0; padding: 10px; width: 100%; box-sizing: border-box; }
+        .btn { background: #28a745; color: #fff; border: none; cursor: pointer; }
+        .btn:hover { background: #218838; }
+        .delete-btn { background: #dc3545; }
+        .delete-btn:hover { background: #c82333; }
+        .service-item, .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Admin Dashboard</h1>
+
+    <div class="dashboard">
+        <!-- Service Management -->
+        <div class="section">
+            <h2>Manage Services</h2>
+            <input id="service-name" type="text" placeholder="Service Name">
+            <input id="service-price" type="number" placeholder="Price">
+            <button class="btn" onclick="addService()">Add Service</button>
+            <div id="service-list"></div>
+        </div>
+
+        <!-- Cart Overview -->
+        <div class="section">
+            <h2>Cart Overview</h2>
+            <div id="cart-overview"></div>
+            <div><strong>Total Revenue: ₹<span id="total-revenue">0</span></strong></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let services = [
+        { name: 'Facial', price: 500 },
+        { name: 'Manicure', price: 300 },
+        { name: 'Pedicure', price: 400 }
+    ];
+    let cart = [];
+
+    function addService() {
+        const name = document.getElementById('service-name').value;
+        const price = parseInt(document.getElementById('service-price').value);
+        
+        if (name && price) {
+            services.push({ name, price });
+            renderServices();
+            document.getElementById('service-name').value = '';
+            document.getElementById('service-price').value = '';
+        } else {
+            alert('Please enter valid service details.');
+        }
+    }
+
+    function deleteService(index) {
+        services.splice(index, 1);
+        renderServices();
+    }
+
+    function renderServices() {
+        const serviceList = document.getElementById('service-list');
+        serviceList.innerHTML = '';
+        services.forEach((service, index) => {
+            const serviceItem = document.createElement('div');
+            serviceItem.className = 'service-item';
+            serviceItem.innerHTML = `
+                <span>${service.name} - ₹${service.price}</span>
+                <button class="delete-btn" onclick="deleteService(${index})">Delete</button>
+            `;
+            serviceList.appendChild(serviceItem);
+        });
+        renderCartOverview();
+    }
+
+    function renderCartOverview() {
+        const cartOverview = document.getElementById('cart-overview');
+        const totalRevenue = document.getElementById('total-revenue');
+        cartOverview.innerHTML = '';
+        let revenue = 0;
+        
+        cart.forEach((item) => {
+            const cartItem = document.createElement('div');
+            cartItem.className = 'cart-item';
+            cartItem.innerHTML = `<span>${item.name} - ₹${item.price}</span>`;
+            cartOverview.appendChild(cartItem);
+            revenue += item.price;
+        });
+        totalRevenue.textContent = revenue;
+    }
+
+    renderServices();
+</script>
+</body>
+</html>

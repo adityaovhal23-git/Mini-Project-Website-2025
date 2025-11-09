@@ -1,0 +1,1158 @@
+<?php
+session_start();
+if (!isset($_SESSION['admin_logged_in'])) {
+    header("Location: admin_login.php");
+    exit();
+}
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pearl Beauty Studio</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtnAYd9NpyFSYkshesqUMM_xd3ppI__xjhmy7K7UXfaMnTg__9KwyZbFdUwBoT-FTUE_E&usqp=CAU"
+                alt="Pearl Beauty Studio">
+        </div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="#about">About</a>
+            <div class="dropdown">
+                <a href="#services">Services</a>
+                <div class="dropdown-content">
+                    <div class="dropdown-item">
+                        <span>Male</span>
+                        <div class="subdropdown">
+                            <ul>
+                                <li>Haircut</li>
+                                <li>Beard Trim</li>
+                                <li>Facial</li>
+                                <li>Hair Color</li>
+                                <li>Massage</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="dropdown-item">
+                        <span>Female</span>
+                        <div class="subdropdown">
+                            <ul>
+                                <li>Haircut & Styling</li>
+                                <li>Facial Treatment</li>
+                                <li>Makeup</li>
+                                <li>Manicure & Pedicure</li>
+                                <li>Hair Spa</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a href="#team">Team</a>
+            <a href="#blog">Blogs</a>
+            <a href="#contact">Contact</a>
+
+           <!----- <a href="admin.html" class="admin-link">Admin Panel</a>-->
+
+        </div>
+        <div class="nav-actions">
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+            
+          
+
+            <div class="cart-icon">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-count">0</span>
+            </div>
+            <div class="wishlist-icon">
+                <i class="fas fa-heart"></i>
+                <span class="wishlist-count">0</span>
+            </div>
+            <div class="user-icon" id="userIcon">
+                <i class="fas fa-user"></i>
+            </div>
+        </div>
+
+        
+        
+    </nav>
+
+    <!-- Login Modal -->
+   <div class="modal" id="loginModal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+
+        <div class="auth-tabs">
+            <button class="tab-btn active" data-tab="login">Login</button>
+            <button class="tab-btn" data-tab="signup">Sign Up</button>
+        </div>
+
+        <!-- Login Form -->
+        <div class="tab-content" id="loginTab">
+            <form class="login-form" action="login.php" method="POST" onsubmit="return validateLogin()">
+                <input style="padding: 35px;"  type="text" id="loginUsername" name="username" placeholder="Username" required>
+                <input type="password" id="loginPassword" name="password" placeholder="Password" required>
+
+                <div class="remember-me">
+                    <input type="checkbox" id="rememberMe">
+                    <label for="rememberMe" style="font-size: 1.5rem; color: white;">Remember Me</label>
+                </div>
+
+                <div style="margin: 10px 0;">
+                    <a href="forgot_password.php" style="color: #f0a500; text-decoration: none;">Forgot Password?</a>
+                </div>
+
+                <button type="submit" name="login">Login</button>
+            </form>
+        </div>
+
+        <!-- Signup Form -->
+        <div class="tab-content" id="signupTab" style="display: none;">
+            <form class="signup-form" action="signup.php" method="POST" onsubmit="return validateSignup()">
+                <input style="padding: 35px;"  type="text" id="fullName" name="full_name" placeholder="Full Name" required>
+                <input style="padding: 35px;"  type="email" id="email" name="email" placeholder="Email" required>
+                <input style="padding: 35px;"  type="text" id="mobile" name="mobile_number" placeholder="Mobile Number" required>
+                <input style="padding: 35px;" type="password" id="password" name="password" placeholder="Password" required>
+                <input style="padding: 35px;"  type="password" id="confirmPassword" name="confirm_password" placeholder="Confirm Password" required>
+
+                <button type="submit" name="signup">Sign Up</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+    <!-- Image Slider -->
+    <div class="slider">
+        <div class="slide">
+            <img src="https://www.aestheticbeautycenter.nl/assets/files/header-1-4.1920x0.webp" alt="Beauty Treatment">
+            <div class="slide-content">
+                <h2>"At Pearl Beauty, we believe in enhancing your natural beauty."</h2>
+                <button class="book-btn">Explore the Beauty</button>
+            </div>
+        </div>
+        <div class="slide">
+            <img src="https://cdn1.treatwell.net/images/view/v2.i5320813.w1080.h720.x0F48FE30/" alt="Beauty Treatment">
+            <div class="slide-content">
+                <h2>"Every treatment is a step towards your radiant self."</h2>
+                <button class="book-btn">Explore the Beauty</button>
+            </div>
+        </div>
+        <div class="slide">
+            <img src="https://static.vecteezy.com/system/resources/previews/038/812/695/large_2x/ai-generated-beautiful-background-for-beauty-salon-advertising-free-photo.jpeg"
+                alt="Beauty Treatment">
+            <div class="slide-content">
+                <h2>"Beauty is a journey, and pearls are the destination."</h2>
+                <button class="book-btn">Explore the Beauty</button>
+            </div>
+        </div>
+        <div class="slide">
+            <img src="https://img.freepik.com/premium-vector/elegant-fashion-cosmetics-makeup-background_1322560-3317.jpg"
+                alt="Beauty Treatment">
+            <div class="slide-content">
+                <h2 style="color: rgb(133, 128, 128);">"Embrace your inner shine; pearls are timeless elegance."</h2>
+                <button class="book-btn">Explore the Beauty</button>
+            </div>
+        </div>
+        <div class="slide">
+            <img src="https://image.slidesdocs.com/responsive-images/background/rose-flower-plant-leaves-cartoon-cosmetic-makeup-advertising-powerpoint-background_3a969b116e__960_540.jpg"
+                alt="Beauty Treatment">
+            <div class="slide-content">
+                <h2 style="color: black;">"Transforming beauty, one appointment at a time."</h2>
+                <button class="book-btn">Explore the Beauty</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- After the slider section, add: -->
+    <section id="about" class="about-section">
+        <div class="about-container">
+            <div class="about-content">
+                <h2 class="section-title">About Us</h2>
+                <div class="about-grid">
+                    <div class="about-image">
+                        <img src="https://coverclap.com/assets/blog/luxurious-hair-salons/hair-salon-montreal-deauville-spa.jpg"
+                            alt="Pearl Beauty Studio Interior">
+                    </div>
+                    <div class="about-text">
+                        <h3>Welcome to Pearl Beauty Studio</h3>
+                        <p>Established in 2015, Pearl Beauty Studio has been a sanctuary of beauty and wellness,
+                            offering premium services to our valued clients. Our mission is to enhance your natural
+                            beauty while providing a relaxing and luxurious experience.</p>
+                        <div class="about-features">
+                            <div class="feature">
+                                <i class="fas fa-award"></i>
+                                <h4>Expert Staff</h4>
+                                <p>Highly trained professionals with years of experience</p>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-spa"></i>
+                                <h4>Premium Products</h4>
+                                <p>Using only the finest beauty and wellness products</p>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-heart"></i>
+                                <h4>Client Satisfaction</h4>
+                                <p>Committed to exceeding your expectations</p>
+                            </div>
+                        </div>
+                        <div class="about-stats">
+                            <div class="stat">
+                                <span class="stat-number">8+</span>
+                                <span class="stat-text">Years of Experience</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-number">10k+</span>
+                                <span class="stat-text">Happy Clients</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-number">50+</span>
+                                <span class="stat-text">Expert Staff</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Replace the existing services section with: -->
+    <section id="services" class="services-section">
+        <div class="services-container">
+            <h2 class="section-title">Luxury Beauty & Grooming Services</h2>
+
+            <div class="service-toggle">
+                <button class="toggle-btn active" data-gender="male">Gentlemen's Services</button>
+                <button class="toggle-btn" data-gender="female">Ladies' Services</button>
+            </div>
+
+            <!-- Male Services -->
+            <div class="services-grid" id="maleServices">
+                <!-- 1. Classic Haircut -->
+                <div id="classic-haircut" class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-cut"></i>
+                    </div>
+                    <h3>Classic Haircut</h3>
+                    <p>Premium haircut with styling and grooming consultation</p>
+                    <div class="service-duration"><i class="far fa-clock"></i> 45 mins</div>
+                    <div class="service-actions">
+                        <button class="book-service-btn">Book Now</button>
+                        <div class="action-icons">
+                            <button class="cart-btn"><i class="fas fa-shopping-cart"></i></button>
+                            <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Beard Grooming -->
+                <div id="beard-grooming" class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-razor"></i>
+                    </div>
+                    <h3>Beard Grooming</h3>
+                    <p>Expert beard shaping and styling with hot towel service</p>
+                    <div class="service-duration"><i class="far fa-clock"></i> 30 mins</div>
+                    <div class="service-actions">
+                        <button class="book-service-btn">Book Now</button>
+                        <div class="action-icons">
+                            <button class="cart-btn"><i class="fas fa-shopping-cart"></i></button>
+                            <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Hair Color -->
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-paint-brush"></i>
+                    </div>
+                    <h3>Hair Color</h3>
+                    <p>Professional color treatment and grey coverage</p>
+                    <div class="service-duration"><i class="far fa-clock"></i> 90 mins</div>
+                    <div class="service-actions">
+                        <button class="book-service-btn">Book Now</button>
+                        <div class="action-icons">
+                            <button class="cart-btn"><i class="fas fa-shopping-cart"></i></button>
+                            <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Men's Facial -->
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-spa"></i>
+                    </div>
+                    <h3>Executive Facial</h3>
+                    <p>Deep cleansing facial designed for men's skin</p>
+                    <div class="service-duration"><i class="far fa-clock"></i> 60 mins</div>
+                    <div class="service-actions">
+                        <button class="book-service-btn">Book Now</button>
+                        <div class="action-icons">
+                            <button class="cart-btn"><i class="fas fa-shopping-cart"></i></button>
+                            <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. Head Massage -->
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-hands"></i>
+                    </div>
+                    <h3>Scalp Treatment</h3>
+                    <p>Relaxing head massage with hair treatment</p>
+                    <div class="service-duration"><i class="far fa-clock"></i> 45 mins</div>
+                    <div class="service-actions">
+                        <button class="book-service-btn">Book Now</button>
+                        <div class="action-icons">
+                            <button class="cart-btn"><i class="fas fa-shopping-cart"></i></button>
+                            <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. Hair Treatment -->
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-pump-medical"></i>
+                    </div>
+                    <h3>Anti-Hair Loss</h3>
+                    <p>Advanced treatment for hair growth and strength</p>
+                    <div class="service-duration"><i class="far fa-clock"></i> 75 mins</div>
+                    <div class="service-actions">
+                        <button class="book-service-btn">Book Now</button>
+                        <div class="action-icons">
+                            <button class="cart-btn"><i class="fas fa-shopping-cart"></i></button>
+                            <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 7. Body Massage -->
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-user-friends"></i>
+                    </div>
+                    <h3>Sports Massage</h3>
+                    <p>Deep tissue massage for muscle recovery</p>
+                    <div class="service-duration"><i class="far fa-clock"></i> 90 mins</div>
+                    <div class="service-actions">
+                        <button class="book-service-btn">Book Now</button>
+                        <div class="action-icons">
+                            <button class="cart-btn"><i class="fas fa-shopping-cart"></i></button>
+                            <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 8. Manicure -->
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-hand-paper"></i>
+                    </div>
+                    <h3>Men's Manicure</h3>
+                    <p>Professional nail care and hand grooming</p>
+                    <div class="service-duration"><i class="far fa-clock"></i> 45 mins</div>
+                    <div class="service-actions">
+                        <button class="book-service-btn">Book Now</button>
+                        <div class="action-icons">
+                            <button class="cart-btn"><i class="fas fa-shopping-cart"></i></button>
+                            <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 9. Pedicure -->
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-socks"></i>
+                    </div>
+                    <h3>Men's Pedicure</h3>
+                    <p>Complete foot care with massage</p>
+                    <div class="service-duration"><i class="far fa-clock"></i> 60 mins</div>
+                    <div class="service-actions">
+                        <button class="book-service-btn">Book Now</button>
+                        <div class="action-icons">
+                            <button class="cart-btn"><i class="fas fa-shopping-cart"></i></button>
+                            <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 10. Face Waxing -->
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-mask"></i>
+                    </div>
+                    <h3>Face Waxing</h3>
+                    <p>Precise facial hair removal service</p>
+                    <div class="service-duration"><i class="far fa-clock"></i> 30 mins</div>
+                    <div class="service-actions">
+                        <button class="book-service-btn">Book Now</button>
+                        <div class="action-icons">
+                            <button class="cart-btn"><i class="fas fa-shopping-cart"></i></button>
+                            <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 11. Hair Styling -->
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-air-freshener"></i>
+                    </div>
+                    <h3>Hair Styling</h3>
+                    <p>Trendy styling with premium products</p>
+                    <div class="service-duration"><i class="far fa-clock"></i> 45 mins</div>
+                    <div class="service-actions">
+                        <button class="book-service-btn">Book Now</button>
+                        <div class="action-icons">
+                            <button class="cart-btn"><i class="fas fa-shopping-cart"></i></button>
+                            <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 12. Body Scrub -->
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-shower"></i>
+                    </div>
+                    <h3>Body Scrub</h3>
+                    <p>Refreshing body exfoliation treatment</p>
+                    <div class="service-duration"><i class="far fa-clock"></i> 60 mins</div>
+                    <div class="service-actions">
+                        <button class="book-service-btn">Book Now</button>
+                        <div class="action-icons">
+                            <button class="cart-btn"><i class="fas fa-shopping-cart"></i></button>
+                            <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Female Services -->
+            <div class="services-grid" id="femaleServices" style="display: none;">
+                <!-- 1. Hair Styling -->
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-female"></i>
+                    </div>
+                    <h3>Hair Styling</h3>
+                    <p>Complete hair makeover with styling</p>
+                    <div class="service-duration"><i class="far fa-clock"></i> 90 mins</div>
+                    <div class="service-actions">
+                        <button class="book-service-btn">Book Now</button>
+                        <div class="action-icons">
+                            <button class="cart-btn"><i class="fas fa-shopping-cart"></i></button>
+                            <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Hair Color -->
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <h3>Hair Coloring</h3>
+                    <p>Premium hair coloring and highlights</p>
+                    <div class="service-duration"><i class="far fa-clock"></i> 120 mins</div>
+                    <div class="service-actions">
+                        <button class="book-service-btn">Book Now</button>
+                        <div class="action-icons">
+                            <button class="cart-btn"><i class="fas fa-shopping-cart"></i></button>
+                            <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Facial -->
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <h3>Signature Facial</h3>
+                    <p>Luxurious facial with organic products</p>
+                    <div class="service-duration"><i class="far fa-clock"></i> 75 mins</div>
+                    <div class="service-actions">
+                        <button class="book-service-btn">Book Now</button>
+                        <div class="action-icons">
+                            <button class="cart-btn"><i class="fas fa-shopping-cart"></i></button>
+                            <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Makeup -->
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-magic"></i>
+                    </div>
+                    <h3>Professional Makeup</h3>
+                    <p>Complete makeup for special occasions</p>
+                    <div class="service-duration"><i class="far fa-clock"></i> 60 mins</div>
+                    <div class="service-actions">
+                        <button class="book-service-btn">Book Now</button>
+                        <div class="action-icons">
+                            <button class="cart-btn"><i class="fas fa-shopping-cart"></i></button>
+                            <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. Manicure -->
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-hand-sparkles"></i>
+                    </div>
+                    <h3>Luxury Manicure</h3>
+                    <p>Premium nail care with art design</p>
+                    <div class="service-duration"><i class="far fa-clock"></i> 60 mins</div>
+                    <div class="service-actions">
+                        <button class="book-service-btn">Book Now</button>
+                        <div class="action-icons">
+                            <button class="cart-btn"><i class="fas fa-shopping-cart"></i></button>
+                            <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. Pedicure -->
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-shoe-prints"></i>
+                    </div>
+                    <h3>Spa Pedicure</h3>
+                    <p>Relaxing foot care with massage</p>
+                    <div class="service-duration"><i class="far fa-clock"></i> 75 mins</div>
+                    <div class="service-actions">
+                        <button class="book-service-btn">Book Now</button>
+                        <div class="action-icons">
+                            <button class="cart-btn"><i class="fas fa-shopping-cart"></i></button>
+                            <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 7. Body Massage -->
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-spa"></i>
+                    </div>
+                    <h3>Aromatherapy Massage</h3>
+                    <p>Relaxing full body massage</p>
+                    <div class="service-duration"><i class="far fa-clock"></i> 90 mins</div>
+                    <div class="service-actions">
+                        <button class="book-service-btn">Book Now</button>
+                        <div class="action-icons">
+                            <button class="cart-btn"><i class="fas fa-shopping-cart"></i></button>
+                            <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 8. Waxing -->
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-feather"></i>
+                    </div>
+                    <h3>Full Body Waxing</h3>
+                    <p>Complete hair removal treatment</p>
+                    <div class="service-duration"><i class="far fa-clock"></i> 120 mins</div>
+                    <div class="service-actions">
+                        <button class="book-service-btn">Book Now</button>
+                        <div class="action-icons">
+                            <button class="cart-btn"><i class="fas fa-shopping-cart"></i></button>
+                            <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 9. Threading -->
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h3>Eyebrow Threading</h3>
+                    <p>Precise eyebrow shaping</p>
+                    <div class="service-duration"><i class="far fa-clock"></i> 20 mins</div>
+                    <div class="service-actions">
+                        <button class="book-service-btn">Book Now</button>
+                        <div class="action-icons">
+                            <button class="cart-btn"><i class="fas fa-shopping-cart"></i></button>
+                            <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 10. Hair Treatment -->
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-pump-soap"></i>
+                    </div>
+                    <h3>Hair Spa</h3>
+                    <p>Deep conditioning hair treatment</p>
+                    <div class="service-duration"><i class="far fa-clock"></i> 60 mins</div>
+                    <div class="service-actions">
+                        <button class="book-service-btn">Book Now</button>
+                        <div class="action-icons">
+                            <button class="cart-btn"><i class="fas fa-shopping-cart"></i></button>
+                            <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 11. Body Scrub -->
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-gem"></i>
+                    </div>
+                    <h3>Luxury Body Scrub</h3>
+                    <p>Premium body exfoliation treatment</p>
+                    <div class="service-duration"><i class="far fa-clock"></i> 75 mins</div>
+                    <div class="service-actions">
+                        <button class="book-service-btn">Book Now</button>
+                        <div class="action-icons">
+                            <button class="cart-btn"><i class="fas fa-shopping-cart"></i></button>
+                            <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 12. Bleach -->
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-sun"></i>
+                    </div>
+                    <h3>Face & Neck Bleach</h3>
+                    <p>Gentle skin lightening treatment</p>
+                    <div class="service-duration"><i class="far fa-clock"></i> 45 mins</div>
+                    <div class="service-actions">
+                        <button class="book-service-btn">Book Now</button>
+                        <div class="action-icons">
+                            <button class="cart-btn"><i class="fas fa-shopping-cart"></i></button>
+                            <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- After the services section, add: -->
+    <section id="team" class="team-section">
+        <div class="team-container">
+            <h2 class="section-title">Meet Our Experts</h2>
+            <p class="team-subtitle">Our team of dedicated beauty professionals is here to serve you</p>
+
+            <div class="team-grid">
+                <!-- Team Member 1 -->
+                <div class="team-card">
+                    <div class="member-image">
+                        <img src="https://pbs.twimg.com/media/GZquwXuWwAoopTZ?format=jpg&name=large"
+                            alt="Sarah Johnson">
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-facebook"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                        </div>
+                    </div>
+                    <div class="member-info">
+                        <h3>Aalim Hakim</h3>
+                        <span class="position">Hair Specialist</span>
+                        <p class="specialty">Expert in hair coloring and styling with 8+ years of experience</p>
+                        <div class="expertise">
+                            <span>Hair Styling</span>
+                            <span>Color Expert</span>
+                            <span>Hair Treatment</span>
+                        </div>
+                        <button class="book-expert">Book Appointment</button>
+                    </div>
+                </div>
+
+                <!-- Team Member 2 -->
+                <div class="team-card">
+                    <div class="member-image">
+                        <img src="https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?q=80&w=1000&auto=format&fit=crop"
+                            alt="Emily Chen">
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-facebook"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                        </div>
+                    </div>
+                    <div class="member-info">
+                        <h3>Pournima Kharat</h3>
+                        <span class="position">Makeup Artist</span>
+                        <p class="specialty">Specialized in bridal and special occasion makeup</p>
+                        <div class="expertise">
+                            <span>Bridal Makeup</span>
+                            <span>Special Effects</span>
+                            <span>Skin Care</span>
+                        </div>
+                        <button class="book-expert">Book Appointment</button>
+                    </div>
+                </div>
+
+                <!-- Team Member 3 -->
+                <div class="team-card">
+                    <div class="member-image">
+                        <img src="https://media.istockphoto.com/id/1783230082/photo/portrait-of-young-female-hairdresser-in-salon.webp?b=1&s=612x612&w=0&k=20&c=sKGRUIg9UgwR1pmdoRZit3f8qinpxlmwdNhPbhSnbPk="
+                            alt="Michael Roberts">
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-facebook"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                        </div>
+                    </div>
+                    <div class="member-info">
+                        <h3>Saakshi Sasane</h3>
+                        <span class="position">Barber Specialist</span>
+                        <p class="specialty">Master barber specializing in modern and classic cuts</p>
+                        <div class="expertise">
+                            <span>Classic Cuts</span>
+                            <span>Beard Styling</span>
+                            <span>Hair Design</span>
+                        </div>
+                        <button class="book-expert">Book Appointment</button>
+                    </div>
+                </div>
+
+                <!-- Team Member 4 -->
+                <div class="team-card">
+                    <div class="member-image">
+                        <img src="https://images.unsplash.com/photo-1554519934-e32b1629d9ee?q=80&w=1000&auto=format&fit=crop"
+                            alt="Sofia Martinez">
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-facebook"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                        </div>
+                    </div>
+                    <div class="member-info">
+                        <h3>Sofia Martinez</h3>
+                        <span class="position">Nail Artist</span>
+                        <p class="specialty">Creative nail designer with attention to detail</p>
+                        <div class="expertise">
+                            <span>Nail Art</span>
+                            <span>Manicure</span>
+                            <span>Pedicure</span>
+                        </div>
+                        <button class="book-expert">Book Appointment</button>
+                    </div>
+                </div>
+
+                <!-- Team Member 5 -->
+                <div class="team-card">
+                    <div class="member-image">
+                        <img src="https://images.unsplash.com/photo-1605980776566-0486c3ac7617?q=80&w=1000&auto=format&fit=crop"
+                            alt="Lisa Wang">
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-facebook"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                        </div>
+                    </div>
+                    <div class="member-info">
+                        <h3>Lisa Wang</h3>
+                        <span class="position">Skincare Specialist</span>
+                        <p class="specialty">Expert in advanced facial treatments and skin rejuvenation</p>
+                        <div class="expertise">
+                            <span>Facial Treatment</span>
+                            <span>Anti-aging</span>
+                            <span>Skin Analysis</span>
+                        </div>
+                        <button class="book-expert">Book Appointment</button>
+                    </div>
+                </div>
+
+                <!-- Team Member 6 -->
+                <div class="team-card">
+                    <div class="member-image">
+                        <img src="https://images.unsplash.com/photo-1601233749202-95d04d5b3c00?q=80&w=1000&auto=format&fit=crop"
+                            alt="David Cooper">
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-facebook"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                        </div>
+                    </div>
+                    <div class="member-info">
+                        <h3>David Cooper</h3>
+                        <span class="position">Massage Therapist</span>
+                        <p class="specialty">Specialized in therapeutic and relaxation massage techniques</p>
+                        <div class="expertise">
+                            <span>Deep Tissue</span>
+                            <span>Swedish Massage</span>
+                            <span>Aromatherapy</span>
+                        </div>
+                        <button class="book-expert">Book Appointment</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Booking Appointment Modal -->
+<div id="bookingModal" class="modal">
+    <div style="padding: 90px;" class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Book Appointment</h2>
+        <form id="bookingForm" method="post" action="submit_appointment.php">
+            <label for="name">Your Name:</label>
+            <input style="padding: 25px; font-size: 1.3rem;" type="text" id="name" name="name" required>
+
+            <label for="age">Age:</label>
+            <input style="padding: 25px; font-size: 1.3rem;" type="number" id="age" name="age" required>
+
+            <label for="gender">Gender:</label>
+            <select style="padding: 25px; font-size: 1.8rem;" id="gender" name="gender" required>
+                <option value="" disabled selected>Select your gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+            </select>
+
+            <label for="mobile">Mobile Number:</label>
+            <input style="padding: 25px; font-size: 1.3rem;" type="tel" id="mobile" name="mobile" required>
+
+            <label for="email">Email:</label>
+            <input style="padding: 25px; font-size: 1.3rem;" type="email" id="email" name="email" required>
+
+            <label for="address">Full Address:</label>
+            <textarea style="padding: 25px; font-size: 1.3rem;" id="address" name="address" rows="3" required></textarea>
+
+            <label for="message">Message:</label>
+            <textarea style="font-size:1.6rem;" id="message" name="message" rows="4"></textarea>
+
+            <label for="expert">Expert:</label>
+            <input style="padding: 25px;" type="text" id="expert" name="expert" readonly>
+
+            <label for="specialty">Specialty:</label>
+            <input style="padding: 25px; " type="text" id="specialty" name="specialty" readonly>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</div>
+
+
+    <!-- Booking Modal -->
+   <div class="modal" id="bookingModal">
+        <div style="padding: 100px;" class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <h2 style="font-size: 4.5rem;color: #f8e0e0;">Book Your Appointment</h2>
+            <form id="bookingForm" action="submit_appointment.php" method="POST">
+                <label style=" font-size: 2rem;color: #aaa;padding-top: 20px;padding:1.2rem;" for="serviceName">Service:</label>
+                <input style="font-size: 1.5rem; padding:12px; font-size: 1.9rem;" type="text" id="serviceName" name="serviceName" autofocus readonly required>
+    
+                <label  style=" font-size: 2rem;color: #aaa;padding-top: 20px;padding:1.2rem;" for="fullName">Full Name:</label>
+                <input style="font-size: 1.5rem;" type="text" id="fullName" name="fullName" required autofocus>
+    
+                <label  style=" font-size: 2rem;color: #aaa;padding-top: 20px; padding:1.2rem;" for="age">Age:</label>
+                <input style="font-size: 1.5rem;" type="number" id="age" name="age" required>
+    
+                <label style="color: #aaa;padding-top: 20px; font-size: 2rem;" for="gender">Gender:</label>
+                <select style="font-size: 1.5rem; padding:12px;"  id="gender" name="gender" required>
+                    <option value="" disabled selected>Select your gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select>
+    
+                <label  style=" font-size: 2rem;color: #aaa;padding-top: 20px;padding:1.2rem;" for="clientEmail">Email ID:</label>
+                <input style="font-size: 1.5rem;" type="email" id="clientEmail" name="clientEmail" required>
+    
+                <label  style=" font-size: 2rem;color: #aaa;padding-top: 20px;padding:1.2rem;" for="mobileNumber">Mobile Number:</label>
+                <input style="font-size: 1.5rem;" type="tel" id="mobileNumber" name="mobileNumber" required>
+    
+                <label  style=" font-size: 2rem;color: #aaa;padding-top: 20px;padding:1.2rem;" for="fullAddress">Full Address:</label>
+                <textarea style="padding:25px; font-size: 1.2rem;" id="fullAddress" name="fullAddress" required></textarea>
+    
+                <label  style=" font-size: 2rem;color: #aaa;padding-top: 20px;padding:1.2rem;" for="appointmentDate">Date:</label>
+                <input style="padding:25px; font-size:1.5rem;" type="date" id="appointmentDate" name="appointmentDate" required>
+    
+                <label  style=" font-size: 2rem;color: #aaa;padding-top: 20px;padding:1.2rem;" for="appointmentTime">Time:</label>
+                <input style="padding:25px; font-size:1.5rem;" type="time" id="appointmentTime" name="appointmentTime" required>
+
+                <label style=" font-size: 2rem;color: #aaa;padding-top: 20px;padding:1.2rem;" for="message">Message:</label>
+<textarea style="padding:25px; font-size: 1.2rem;" id="message" name="message" rows="12" cols="12"></textarea>
+    
+                <button style="padding:25px;font-size: 1.5rem;" type="submit">Confirm Booking</button>
+            </form>
+        </div>
+    </div>
+
+    
+    <!-- Packages Section -->
+    <section id="packages" class="packages-section">
+        <div class="packages-container">
+            <h2 class="section-title">Our Beauty Packages</h2>
+            <div class="packages-grid">
+                <!-- Bronze Package -->
+                <div class="package-card"
+                    style="background-image: url(https://thumbs.dreamstime.com/b/bronze-abstract-background-2449089.jpg);">
+                    <h3 style="color: rgb(255, 255, 255);">Bronze Package</h3><br>
+                    <ul class="package-list" style="color: white;">
+                        <li>Relaxing Scalp Treatment</li>
+                        <li>Classic Haircut</li>
+                        <li>Beard Grooming</li>
+
+                    </ul><br>
+                    <div class="package-price" style="color: aliceblue;">Rs.199</div>
+                    <button class="buy-package-btn">Buy Now</button><br>
+                </div>
+
+                <!-- Silver Package -->
+                <div class="package-card"
+                    style="background-size: cover; background-image: url(https://thumbs.dreamstime.com/b/design-elegant-silver-background-336283013.jpg);">
+                    <h3 style="color: rgb(0, 0, 0);">Silver Package</h3><br>
+                    <ul class="package-list">
+                        <li>Classic Haircut</li>
+                        <li>Beard Grooming</li>
+                        <li>Facial Treatment</li>
+                        <li>Manicure</li>
+                    </ul><br>
+                    <div class="package-price">Rs.499</div>
+                    <button class="buy-package-btn">Buy Now</button><br>
+                </div>
+
+                <!-- Gold Package -->
+                <div class="package-card"
+                    style="background-size: cover; background-image: url(https://t4.ftcdn.net/jpg/09/99/04/79/360_F_999047905_10Af0zpVdN3Ut0A8lCGEgBeKNIXxqrew.jpg);">
+                    <h3 style="color: rgb(0, 0, 0);">Gold Package</h3><br>
+                    <ul class="package-list">
+                        <li>Classic Haircut</li>
+                        <li>Beard Grooming</li>
+                        <li>Facial Treatment</li>
+                        <li>Full Body Massage</li>
+                        <li>Hair Coloring</li>
+                        <li>Manicure</li>
+
+                    </ul><br>
+                    <div class="package-price">Rs.1999</div>
+                    <button class="buy-package-btn">Buy Now</button><br><br>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+
+    <!-- Review Section -->
+   
+    <!-- Review Section -->
+<section id="reviews" class="reviews-section">
+    <div class="reviews-container">
+        <h2 class="section-title">What Our Customers Say</h2>
+        <div class="reviews-grid">
+            <!-- Review 1 -->
+            <div class="review-card">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/a/ad/Aditya_promoting_Tum_Bin_2_%28cropped%29.jpg" alt="John Doe" class="reviewer-image">
+                <p>"I had an amazing experience at Pearl Beauty Studio! The staff was incredibly friendly and professional. Highly recommend!"</p>
+                <h4>John Doe</h4>
+                <span>⭐⭐⭐⭐⭐</span>
+            </div>
+            <!-- Review 2 -->
+            <div class="review-card">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/7/7b/Shraddha_Kapoor_promoting_Street_Dancer_3D.jpg" alt="Jane Smith" class="reviewer-image">
+                <p>"The services are top-notch! I loved my haircut and the facial treatment was so relaxing. Will definitely come back!"</p>
+                <h4>Jane Smith</h4>
+                <span>⭐⭐⭐⭐⭐</span>
+            </div>
+            <!-- Review 3 -->
+            <div class="review-card">
+                <img src="https://hamaraphotos.com/albums300_2012/wpw-20121124/hpse_fullsize__1582817913_Anikita%20Shorey%20launches%20new%20collection%20of%20Gitanjali%20in%20Bandra%2C%20Mumbai%20on%2023rd%20Nov%202012%20%2841%29.JPG" alt="Emily Johnson" class="reviewer-image">
+                <p>"A wonderful place to pamper yourself. The ambiance is lovely and the staff is very skilled. Highly recommend the massage!"</p>
+                <h4>Emily Johnson</h4>
+                <span>⭐⭐⭐⭐</span>
+            </div>
+            <!-- Review 4 -->
+            <div class="review-card">
+                <img src="https://images.unsplash.com/photo-1506794778162-3657c8c8b3c2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDEyfHx3b21hbiUyMGZhbGwlMjBpbWFnZXxlbnwwfHx8fDE2NjkyNjQyMDQ&ixlib=rb-1.2.1&q=80&w=400" alt="Michael Brown" class="reviewer-image">
+                <p>"I had a great experience with the makeup artist. She understood exactly what I wanted and made me look stunning!"</p>
+                <h4>Michael Brown</h4>
+                <span>⭐⭐⭐</span>
+            </div>
+            <!-- Review 5 -->
+            <div class="review-card">
+                <img src="https://cdn0.weddingwire.in/vendor/4659/3_2/960/png/wedding-photography-moments-by-mohit-tolani-bridal-shots_15_314659-159281285882966.jpeg" alt="Lisa White" class="reviewer-image">
+                <p>"Pearl Beauty Studio is my go-to place for all my beauty needs. The staff is always welcoming and the services are excellent!"</p>
+                <h4>Lisa White</h4>
+                <span>⭐⭐⭐⭐⭐</span>
+            </div>
+            <!-- Review 6 -->
+            <div class="review-card">
+                <img src="https://images.unsplash.com/photo-1506794778162-3657c8c8b3c2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDEwfHx3b21hbiUyMGZhbGwlMjBpbWFnZXxlbnwwfHx8fDE2NjkyNjQyMDQ&ixlib=rb-1.2.1&q=80&w=400" alt="David Wilson" class="reviewer-image">
+                <p>"I absolutely love this place! The staff is so attentive and the treatments are always top quality. I leave feeling rejuvenated!"</p>
+                <h4>David Wilson</h4>
+                <span>⭐⭐⭐⭐⭐</span>
+            </div>
+            <!-- Review 7 -->
+            <div class="review-card">
+                <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDIyfHx3b21hbiUyMGZhbGwlMjBpbWFnZXxlbnwwfHx8fDE2NjkyNjQyMDQ&ixlib=rb-1.2.1&q=80&w=400" alt="Sarah Lee" class="reviewer-image">
+                <p>"The atmosphere is so relaxing, and the services are worth every penny. I highly recommend the aromatherapy massage!"</p>
+                <h4>Sarah Lee</h4>
+                <span>⭐⭐⭐⭐⭐</span>
+            </div>
+            <!-- Review 8 -->
+            <div class="review-card">
+                <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDEwfHx3b21hbiUyMGZhbGwlMjBpbWFnZXxlbnwwfHx8fDE2NjkyNjQyMDQ&ixlib=rb-1.2.1&q=80&w=400" alt="Chris Evans" class="reviewer-image">
+                <p>"I had a facial and it was heavenly! My skin has never felt better. The products they use are amazing!"</p>
+                <h4>Chris Evans</h4>
+                <span>⭐⭐⭐⭐</span>
+            </div>
+            <!-- Review 9 -->
+            <div class="review-card">
+                <img src="https://images.unsplash.com/photo-1506794778162-3657c8c8b3c2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDEwfHx3b21hbiUyMGZhbGwlMjBpbWFnZXxlbnwwfHx8fDE2NjkyNjQyMDQ&ixlib=rb-1.2.1&q=80&w=400" alt="Jessica Taylor" class="reviewer-image">
+                <p>"The team at Pearl Beauty is fantastic! They really listen to your needs and provide personalized services. Highly recommend!"</p>
+                <h4>Jessica Taylor</h4>
+                <span>⭐⭐⭐⭐⭐</span>
+            </div>
+            <!-- Review 10 -->
+            <div class="review-card">
+                <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDIyfHx3b21hbiUyMGZhbGwlMjBpbWFnZXxlbnwwfHx8fDE2NjkyNjQyMDQ&ixlib=rb-1.2.1&q=80&w=400" alt="Daniel Martinez" class="reviewer-image">
+                <p>"I always look forward to my appointments here. The staff is friendly, and the services are consistently excellent!"</p>
+                <h4>Daniel Martinez</h4>
+                <span>⭐⭐⭐⭐⭐</span>
+            </div>
+        </div>
+    </div>
+</section>
+   
+<!---Blog Section-->
+<section id="blog" class="blog">
+    <div class="container">
+        <h2 class="blog-title">Latest Beauty Tips & Trends</h2>
+        <div class="blog-posts">
+            <article class="blog-post">
+                <img src="https://dermapuritys.com/php/uploads/1672913999.png" alt="Beauty Tip 1" class="post-image">
+                <h3 class="post-title">5 Skincare Tips for Glowing Skin</h3>
+                <p class="post-excerpt">Discover the secrets to achieving radiant skin with these simple tips...</p>
+                <a href="post1.html" class="read-more">Read More</a>
+            </article>
+            <article class="blog-post">
+                <img src="https://www.nykaa.com/beauty-blog/wp-content/uploads/2024/09/festive-makeup-look-banner-image.jpg" alt="Beauty Tip 2" class="post-image">
+                <h3 class="post-title">Makeup Trends to Try This Season</h3>
+                <p class="post-excerpt">Stay ahead of the curve with these must-try makeup trends...</p>
+                <a href="post2.html" class="read-more">Read More</a>
+            </article>
+            <article class="blog-post">
+                <img src="https://i.ytimg.com/vi/DbJl_o8_-ZA/maxresdefault.jpg" alt="Beauty Tip 3" class="post-image">
+                <h3 class="post-title">The Best Hair Care Products for Every Hair Type</h3>
+                <p class="post-excerpt">Find the perfect products to keep your hair healthy and beautiful...</p>
+                <a href="post3.html" class="read-more">Read More</a>
+            </article>
+            <article class="blog-post">
+                <img src="https://i.ytimg.com/vi/iD6VVn7B630/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLCXa7e4PWcQkhXyT4F5auJwSa_zPg" alt="Beauty Tip 4" class="post-image">
+                <h3 class="post-title">Nail Art Ideas for Every Occasion</h3>
+                <p class="post-excerpt">Get inspired with these stunning nail art designs that you can try at home...</p>
+                <a href="post4.html" class="read-more">Read More</a>
+            </article>
+            <article class="blog-post">
+                <img src="https://niram.in/cdn/shop/articles/The_Best_Foundation_For_Your_Skin_How_To_Select.jpg?v=1679485755" alt="Beauty Tip 5" class="post-image">
+                <h3 class="post-title">How to Choose the Right Foundation for Your Skin Type</h3>
+                <p class="post-excerpt">Learn how to select the perfect foundation that matches your skin tone and type...</p>
+                <a href="post5.html" class="read-more">Read More</a>
+            </article>
+            <article class="blog-post">
+                <img src="https://www.bmvfragrances.com/admin/public/upload/blog/1707303840503887.jpg" alt="Beauty Tip 6" class="post-image">
+                <h3 class="post-title">Essential Oils for Beauty: Benefits and Uses</h3>
+                <p class="post-excerpt">Explore the amazing benefits of essential oils and how to incorporate them into your beauty routine...</p>
+                <a href="post6.html" class="read-more">Read More</a>
+            </article>
+        </div>
+    </div>
+</section>
+
+
+
+    <!-- Contact Us Section -->
+    <section id="contact" class="contact-section">
+        <div class="contact-container">
+            <div class="contact-info">
+                <h2>Contact Us</h2><br>
+                <p>At Pearl Beauty, we believe that your voice matters. Your feedback is invaluable to us as it helps us
+                    enhance our services, improve our products, and create a more enjoyable experience for all our
+                    customers. We are committed to providing you with the highest quality beauty products and services,
+                    and your insights play a crucial role in our continuous improvement. At Pearl Beauty, we are
+                    dedicated to creating a positive and fulfilling experience for our customers. Your feedback and
+                    inquiries are essential to us, and we are committed to addressing them promptly and effectively. We
+                    value your trust and strive to exceed your expectations with every interaction.Thank you for being a
+                    part of the Pearl Beauty community. We look forward to hearing from you and
+                    continuing to serve you with the best in beauty products and services. Your satisfaction is our
+                    priority, and together, we can create a beautiful experience for everyone.</p><br>
+                <a href="#" class="learn-more">Learn More</a>
+            </div>
+            <div class="contact-form">
+                <form action="submit_contact.php" method="POST"> <!-- Change to your PHP file name -->
+                    <input type="text" name="full_name" placeholder="Full Name" required>
+                    <input type="email" name="email" placeholder="Email ID" required>
+                    <input type="text" name="address" placeholder="Address" required>
+                    <textarea name="message" placeholder="Message" rows="5" required></textarea>
+                    <button type="submit">Send</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-links">
+                <h3>About Us</h3>
+                <ul>
+                    <li><a href="#about">Our Story</a></li>
+                    <li><a href="#team">Meet the Team</a></li>
+                    <li><a href="#contact">Contact Us</a></li>
+                    <li><a href="#reviews">Customer Reviews</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h3>Services</h3>
+                <ul>
+                    <li><a href="#services">Beauty Services</a></li>
+                    <li><a href="#packages">Packages</a></li>
+                    <li><a href="#gallery">Gallery</a></li>
+                    <li><a href="#blog">Blog</a></li>
+                </ul>
+            </div>
+            <div class="footer-subscription">
+                <h3>Subscribe to Our Newsletter</h3>
+                <form class="subscription-form">
+                    <input type="email" placeholder="Enter your email" required>
+                    <button type="submit">Subscribe</button>
+                </form>
+            </div>
+            <div class="footer-socials">
+                <h3 style="font-size: 2rem; color:whitesmoke;font-weight: 800;text-align: left;">Follow Us</h3>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-pinterest"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Pearl Beauty Studio. All rights reserved.</p>
+        </div>
+    </footer>
+    <script src="script.js"></script>
+</body>
+
+</html>
